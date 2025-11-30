@@ -272,7 +272,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                                     <div className="flex items-center mb-3">
                                                         <Link size={20} className="text-white/70 mr-2" />
                                                         <h4 className="text-lg uppercase tracking-wider font-medium text-white/70">
-                                                            Connected Nodes
+                                                            НАШИ ПРОДУКТЫ
                                                         </h4>
                                                     </div>
                                                     <div className="flex flex-wrap gap-2">
