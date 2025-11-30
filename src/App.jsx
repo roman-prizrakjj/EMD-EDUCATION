@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { InteractiveRobotSpline } from './components/blocks/interactive-3d-robot';
 import { PulseBeams } from "@/components/ui/pulse-beams";
 import { MorphingTextDemo } from "@/components/ui/morphing-text-demo";
+import RadialOrbitalTimeline from "@/components/RadialOrbitalTimeline";
+import { productsData } from "@/data/productsData";
 
 const beams = [
     {
@@ -59,66 +62,84 @@ const gradientColors = {
 
 function App() {
     const ROBOT_SCENE_URL = "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
+    const [currentPage, setCurrentPage] = useState('home');
+
+    const handleProductsClick = () => {
+        setCurrentPage('products');
+    };
+
+    const handleBackToHome = () => {
+        setCurrentPage('home');
+    };
 
     return (
-        <div className="relative w-screen h-screen overflow-hidden bg-black">
-            <InteractiveRobotSpline
-                scene={ROBOT_SCENE_URL}
-                className="absolute inset-0 z-0 translate-y-48 md:translate-y-64 lg:translate-y-80"
-            />
+        <AnimatePresence mode="wait">
+            {currentPage === 'home' ? (
+                <motion.div
+                    key="home"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.5 }}
+                    className="relative w-screen h-screen overflow-hidden bg-black"
+                >
+                    <InteractiveRobotSpline
+                        scene={ROBOT_SCENE_URL}
+                        className="absolute inset-0 z-0 translate-y-48 md:translate-y-64 lg:translate-y-80"
+                    />
 
-            <div className="
-        absolute inset-0 z-10
-        pt-10 md:pt-20 lg:pt-32
-        px-4 md:px-8            
-        pointer-events-none     
-      ">
-                <div className="
-          text-center             
-          text-white              
-          drop-shadow-lg          
-          w-full max-w-4xl        
-          mx-auto                 
-        ">
-                    <h1 className="
-            text-4xl md:text-6xl lg:text-7xl xl:text-8xl 
-            font-black tracking-tighter font-orbitron
-            bg-clip-text text-transparent bg-gradient-to-b from-white via-gray-200 to-gray-500
-            drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]
-          ">
-                        EMD Education
-                    </h1>
-                    <div className="
-            mt-4 md:mt-6
-            text-xl md:text-3xl lg:text-4xl
-            font-bold text-gray-200
-            tracking-wide font-rajdhani
-            drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]
-          ">
-                        <MorphingTextDemo />
-                    </div>
+                    <div className="absolute inset-0 z-10 pt-10 md:pt-20 lg:pt-32 px-4 md:px-8 pointer-events-none">
+                        <div className="text-center text-white drop-shadow-lg w-full max-w-4xl mx-auto">
+                            <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tighter font-orbitron bg-clip-text text-transparent bg-gradient-to-b from-white via-gray-200 to-gray-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                                EMD Education
+                            </h1>
+                            <div className="mt-4 md:mt-6 text-xl md:text-3xl lg:text-4xl font-bold text-gray-200 tracking-wide font-rajdhani drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                <MorphingTextDemo />
+                            </div>
 
-                    <div className="mt-12 pointer-events-auto flex justify-center h-[200px] w-full">
-                        <PulseBeams
-                            beams={beams}
-                            gradientColors={gradientColors}
-                            className="bg-transparent"
-                        >
-                            <button className="bg-transparent w-[320px] z-40 h-[120px] no-underline group cursor-pointer relative rounded-full p-px text-xs font-semibold leading-6 text-white inline-block">
-                                <span className="absolute inset-0 overflow-hidden rounded-full">
-                                    <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                                </span>
-                                <div className="relative flex justify-center w-[320px] text-center space-x-2 h-[120px] items-center z-10 rounded-full bg-black py-0.5 px-4 ring-1 ring-white/10">
-                                    <span className="md:text-4xl text-base inline-block font-bold text-white">
-                                        Наши продукты
-                                    </span>
-                                </div>
-                            </button>
-                        </PulseBeams>
+                            <div className="mt-12 pointer-events-auto flex justify-center h-[200px] w-full">
+                                <PulseBeams
+                                    beams={beams}
+                                    gradientColors={gradientColors}
+                                    className="bg-transparent"
+                                >
+                                    <button
+                                        onClick={handleProductsClick}
+                                        className="bg-transparent w-[320px] z-40 h-[120px] no-underline group cursor-pointer relative rounded-full p-px text-xs font-semibold leading-6 text-white inline-block"
+                                    >
+                                        <span className="absolute inset-0 overflow-hidden rounded-full">
+                                            <span className="absolute inset-0 rounded-full bg-[image:radial-gradient(75%_100%_at_50%_0%,rgba(56,189,248,0.6)_0%,rgba(56,189,248,0)_75%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                                        </span>
+                                        <div className="relative flex justify-center w-[320px] text-center space-x-2 h-[120px] items-center z-10 rounded-full bg-black py-0.5 px-4 ring-1 ring-white/10">
+                                            <span className="md:text-4xl text-base inline-block font-bold text-white">
+                                                Наши продукты
+                                            </span>
+                                        </div>
+                                    </button>
+                                </PulseBeams>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </motion.div>
+            ) : (
+                <motion.div
+                    key="products"
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="relative w-screen h-screen"
+                >
+                    <button
+                        onClick={handleBackToHome}
+                        className="absolute top-8 left-8 z-50 px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-full border border-white/20 hover:bg-white/20 transition-all font-rajdhani font-bold"
+                    >
+                        ← Назад
+                    </button>
+                    <RadialOrbitalTimeline timelineData={productsData} />
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 
