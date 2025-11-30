@@ -1,39 +1,10 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Zap, Clock, Users, CheckCircle, ArrowRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { X, Clock, Users, CheckCircle, ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ProductModal({ isOpen, onClose, product }) {
     if (!product) return null;
-
-    const Icon = product.icon;
-
-    const getStatusStyles = (status) => {
-        switch (status) {
-            case "completed":
-                return "text-white bg-black border-white";
-            case "in-progress":
-                return "text-black bg-white border-black";
-            case "pending":
-                return "text-white bg-black/40 border-white/50";
-            default:
-                return "text-white bg-black/40 border-white/50";
-        }
-    };
-
-    const getStatusText = (status) => {
-        switch (status) {
-            case "completed":
-                return "ДОСТУПНО";
-            case "in-progress":
-                return "В РАЗРАБОТКЕ";
-            case "pending":
-                return "СКОРО";
-            default:
-                return status;
-        }
-    };
 
     return (
         <AnimatePresence>
@@ -70,39 +41,15 @@ export function ProductModal({ isOpen, onClose, product }) {
 
                             <div className="relative h-full overflow-y-auto p-8 md:p-12 lg:p-16">
                                 <div className="max-w-4xl mx-auto">
-                                    <div className="flex items-start gap-6 mb-8">
-                                        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-white/20 flex items-center justify-center flex-shrink-0">
-                                            <Icon size={40} className="text-white" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-4 mb-3">
-                                                <Badge className={`px-4 py-1 text-sm ${getStatusStyles(product.status)}`}>
-                                                    {getStatusText(product.status)}
-                                                </Badge>
-                                                <span className="text-lg font-mono text-white/50">{product.date}</span>
-                                            </div>
-                                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-orbitron tracking-tight">
-                                                {product.title}
-                                            </h2>
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-10">
-                                        <div className="flex justify-between items-center text-lg mb-3">
-                                            <span className="flex items-center text-white/70">
-                                                <Zap size={20} className="mr-2 text-purple-400" />
-                                                Energy Level
+                                    <div className="mb-8">
+                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-orbitron tracking-tight mb-4">
+                                            {product.title}
+                                        </h2>
+                                        {product.details?.level && (
+                                            <span className="inline-block px-4 py-1 text-sm bg-white/10 border border-white/20 rounded-full text-white/80">
+                                                {product.details.level}
                                             </span>
-                                            <span className="font-mono text-2xl text-white">{product.energy}%</span>
-                                        </div>
-                                        <div className="w-full h-4 bg-white/10 rounded-full overflow-hidden">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: `${product.energy}%` }}
-                                                transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-                                                className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
-                                            />
-                                        </div>
+                                        )}
                                     </div>
 
                                     <div className="mb-10">

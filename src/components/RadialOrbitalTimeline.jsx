@@ -33,8 +33,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const openProductModal = (productId) => {
-        const product = timelineData.find((i) => i.id === productId);
+    const openProductModal = (product) => {
         if (product) {
             setModalProduct(product);
         }
@@ -159,7 +158,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
 
     const getRelatedItems = (itemId) => {
         const currentItem = timelineData.find((item) => item.id === itemId);
-        return currentItem ? currentItem.relatedIds : [];
+        return currentItem?.relatedIds || [];
     };
 
     const isRelatedToActive = (itemId) => {
@@ -288,7 +287,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                 </div>
 
                                 {isExpanded && (
-                                    <Card className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-[500px] md:max-w-[600px] max-h-[80vh] overflow-y-auto bg-black/95 backdrop-blur-lg border-white/30 shadow-xl shadow-white/10 z-[250]">
+                                    <Card className="absolute top-24 left-1/2 -translate-x-1/2 w-[280px] sm:w-[350px] md:w-[450px] max-h-[60vh] overflow-y-auto bg-black/95 backdrop-blur-lg border-white/30 shadow-xl shadow-white/10 z-[250]">
                                         <CardHeader className="pb-3 p-4 md:p-6">
                                             <div className="flex justify-between items-center">
                                                 <Badge
@@ -329,38 +328,33 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                                 </div>
                                             </div>
 
-                                            {item.relatedIds.length > 0 && (
+                                            {item.products && item.products.length > 0 && (
                                                 <div className="mt-4 pt-4 border-t border-white/10">
                                                     <div className="flex items-center mb-3">
                                                         <Link size={18} className="text-white/70 mr-2" />
                                                         <h4 className="text-sm md:text-base uppercase tracking-wider font-medium text-white/70">
-                                                            НАШИ ПРОДУКТЫ
+                                                            ПРОДУКТЫ
                                                         </h4>
                                                     </div>
                                                     <div className="flex flex-wrap gap-2">
-                                                        {item.relatedIds.map((relatedId) => {
-                                                            const relatedItem = timelineData.find(
-                                                                (i) => i.id === relatedId
-                                                            );
-                                                            return (
-                                                                <Button
-                                                                    key={relatedId}
-                                                                    variant="outline"
-                                                                    size="sm"
-                                                                    className="flex items-center h-8 md:h-10 px-3 md:px-4 py-1 md:py-2 text-xs md:text-sm rounded-none border-white/20 bg-transparent hover:bg-white/10 text-white/80 hover:text-white transition-all"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        openProductModal(relatedId);
-                                                                    }}
-                                                                >
-                                                                    {relatedItem?.title}
-                                                                    <ArrowRight
-                                                                        size={14}
-                                                                        className="ml-1 md:ml-2 text-white/60"
-                                                                    />
-                                                                </Button>
-                                                            );
-                                                        })}
+                                                        {item.products.map((product) => (
+                                                            <Button
+                                                                key={product.id}
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="flex items-center h-8 md:h-10 px-3 md:px-4 py-1 md:py-2 text-xs md:text-sm rounded-none border-white/20 bg-transparent hover:bg-white/10 text-white/80 hover:text-white transition-all"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    openProductModal(product);
+                                                                }}
+                                                            >
+                                                                {product.title}
+                                                                <ArrowRight
+                                                                    size={14}
+                                                                    className="ml-1 md:ml-2 text-white/60"
+                                                                />
+                                                            </Button>
+                                                        ))}
                                                     </div>
                                                 </div>
                                             )}
