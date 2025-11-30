@@ -3,7 +3,7 @@ import { BookOpen, Code, Rocket, Users, Lightbulb, Target } from "lucide-react";
 export const productsData = [
     {
         id: 1,
-        title: "AI Обучение",
+        title: "Рост через AI",
         date: "2024",
         content: "Комплексные программы обучения AI-навыкам с нуля до профессионального уровня.",
         category: "education",
@@ -14,7 +14,7 @@ export const productsData = [
     },
     {
         id: 2,
-        title: "Нейроассист-кодинг",
+        title: "AI-пайплайны, которые работают",
         date: "2024",
         content: "Практические курсы по использованию AI-ассистентов в разработке без боли.",
         category: "development",
@@ -25,7 +25,7 @@ export const productsData = [
     },
     {
         id: 3,
-        title: "AI-стратегии",
+        title: "Автоматизация для роста",
         date: "2024",
         content: "Разработка и внедрение AI-стратегий для компаний любого масштаба.",
         category: "consulting",
@@ -36,7 +36,7 @@ export const productsData = [
     },
     {
         id: 4,
-        title: "Корпоративное обучение",
+        title: "Навыки, ускоренные AI",
         date: "2024",
         content: "Повышение квалификации специалистов и развитие контекстного мышления.",
         category: "corporate",
@@ -47,7 +47,7 @@ export const productsData = [
     },
     {
         id: 5,
-        title: "Автоматизация процессов",
+        title: "Команды, работающие быстрее",
         date: "2024",
         content: "Внедрение AI-решений для автоматизации отделов и оптимизации бизнес-операций.",
         category: "automation",
@@ -58,7 +58,7 @@ export const productsData = [
     },
     {
         id: 6,
-        title: "Инновационные решения",
+        title: "Решения, построенные на AI",
         date: "2024",
         content: "Создание продуктовых пайплайнов и внедрение процессов под ключ.",
         category: "innovation",
