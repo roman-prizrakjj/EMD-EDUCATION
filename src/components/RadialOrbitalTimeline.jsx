@@ -5,6 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProductModal } from "@/components/ui/product-modal";
 
+const getOrbitRadius = () => {
+    if (typeof window === 'undefined') return 220;
+    const w = window.innerWidth;
+    if (w < 768) return 144;
+    if (w < 1280) return 220;
+    if (w < 1536) return 300;
+    return 340;
+};
+
 export default function RadialOrbitalTimeline({ timelineData }) {
     const [expandedItems, setExpandedItems] = useState({});
     const [rotationAngle, setRotationAngle] = useState(0);
@@ -13,9 +22,16 @@ export default function RadialOrbitalTimeline({ timelineData }) {
     const [centerOffset, setCenterOffset] = useState({ x: 0, y: 0 });
     const [activeNodeId, setActiveNodeId] = useState(null);
     const [modalProduct, setModalProduct] = useState(null);
+    const [orbitRadius, setOrbitRadius] = useState(getOrbitRadius);
     const containerRef = useRef(null);
     const orbitRef = useRef(null);
     const nodeRefs = useRef({});
+
+    useEffect(() => {
+        const handleResize = () => setOrbitRadius(getOrbitRadius());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const openProductModal = (productId) => {
         const product = timelineData.find((i) => i.id === productId);
@@ -101,11 +117,10 @@ export default function RadialOrbitalTimeline({ timelineData }) {
 
     const calculateNodePosition = (index, total) => {
         const angle = ((index / total) * 360 + rotationAngle) % 360;
-        const radius = window.innerWidth < 768 ? 140 : window.innerWidth < 1280 ? 220 : window.innerWidth < 1536 ? 300 : 340;
         const radian = (angle * Math.PI) / 180;
 
-        const x = radius * Math.cos(radian) + centerOffset.x;
-        const y = radius * Math.sin(radian) + centerOffset.y;
+        const x = orbitRadius * Math.cos(radian) + centerOffset.x;
+        const y = orbitRadius * Math.sin(radian) + centerOffset.y;
 
         const zIndex = Math.round(100 + 50 * Math.cos(radian));
         const opacity = Math.max(
@@ -273,12 +288,11 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                 </div>
 
                                 {isExpanded && (
-                                    <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-[500px] md:w-[600px] bg-black/90 backdrop-blur-lg border-white/30 shadow-xl shadow-white/10 overflow-visible">
-                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-white/50"></div>
-                                        <CardHeader className="pb-4">
+                                    <Card className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100vw-2rem)] max-w-[500px] md:max-w-[600px] max-h-[80vh] overflow-y-auto bg-black/95 backdrop-blur-lg border-white/30 shadow-xl shadow-white/10 z-[250]">
+                                        <CardHeader className="pb-3 p-4 md:p-6">
                                             <div className="flex justify-between items-center">
                                                 <Badge
-                                                    className={`px-4 py-1 text-lg ${getStatusStyles(
+                                                    className={`px-3 py-1 text-sm md:text-base ${getStatusStyles(
                                                         item.status
                                                     )}`}
                                                 >
@@ -288,38 +302,38 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                                             ? "IN PROGRESS"
                                                             : "PENDING"}
                                                 </Badge>
-                                                <span className="text-lg font-mono text-white/50">
+                                                <span className="text-sm md:text-base font-mono text-white/50">
                                                     {item.date}
                                                 </span>
                                             </div>
-                                            <CardTitle className="text-2xl mt-4">
+                                            <CardTitle className="text-xl md:text-2xl mt-3">
                                                 {item.title}
                                             </CardTitle>
                                         </CardHeader>
-                                        <CardContent className="text-lg text-white/80">
+                                        <CardContent className="text-sm md:text-base text-white/80 p-4 md:p-6 pt-0">
                                             <p>{item.content}</p>
 
-                                            <div className="mt-6 pt-4 border-t border-white/10">
-                                                <div className="flex justify-between items-center text-lg mb-2">
+                                            <div className="mt-4 pt-4 border-t border-white/10">
+                                                <div className="flex justify-between items-center text-sm md:text-base mb-2">
                                                     <span className="flex items-center">
-                                                        <Zap size={20} className="mr-2" />
+                                                        <Zap size={18} className="mr-2" />
                                                         Energy Level
                                                     </span>
-                                                    <span className="font-mono text-xl">{item.energy}%</span>
+                                                    <span className="font-mono text-base md:text-lg">{item.energy}%</span>
                                                 </div>
-                                                <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                                                <div className="w-full h-2 md:h-3 bg-white/10 rounded-full overflow-hidden">
                                                     <div
-                                                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                                                        className="h-full bg-gradient-to-r from-white/60 to-white/40"
                                                         style={{ width: `${item.energy}%` }}
                                                     ></div>
                                                 </div>
                                             </div>
 
                                             {item.relatedIds.length > 0 && (
-                                                <div className="mt-6 pt-4 border-t border-white/10">
+                                                <div className="mt-4 pt-4 border-t border-white/10">
                                                     <div className="flex items-center mb-3">
-                                                        <Link size={20} className="text-white/70 mr-2" />
-                                                        <h4 className="text-lg uppercase tracking-wider font-medium text-white/70">
+                                                        <Link size={18} className="text-white/70 mr-2" />
+                                                        <h4 className="text-sm md:text-base uppercase tracking-wider font-medium text-white/70">
                                                             НАШИ ПРОДУКТЫ
                                                         </h4>
                                                     </div>
@@ -333,7 +347,7 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                                                     key={relatedId}
                                                                     variant="outline"
                                                                     size="sm"
-                                                                    className="flex items-center h-10 px-4 py-2 text-base rounded-none border-white/20 bg-transparent hover:bg-white/10 text-white/80 hover:text-white transition-all"
+                                                                    className="flex items-center h-8 md:h-10 px-3 md:px-4 py-1 md:py-2 text-xs md:text-sm rounded-none border-white/20 bg-transparent hover:bg-white/10 text-white/80 hover:text-white transition-all"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
                                                                         openProductModal(relatedId);
@@ -341,8 +355,8 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                                                 >
                                                                     {relatedItem?.title}
                                                                     <ArrowRight
-                                                                        size={16}
-                                                                        className="ml-2 text-white/60"
+                                                                        size={14}
+                                                                        className="ml-1 md:ml-2 text-white/60"
                                                                     />
                                                                 </Button>
                                                             );
